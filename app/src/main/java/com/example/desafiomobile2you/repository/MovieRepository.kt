@@ -23,7 +23,7 @@ class MovieRepository(retrofit: Retrofit) {
 
     val movieApi: MovieApi = MovieApi(retrofit)
 
-    fun fetchDetails(movieId: Int): LiveData<Resource<Movie, Exception>> {
+    fun fetchDetails(movieId: Int, callback: (Movie) -> Unit): LiveData<Resource<Movie, Exception>> {
         val liveData = MutableLiveData<Resource<Movie, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
@@ -32,6 +32,7 @@ class MovieRepository(retrofit: Retrofit) {
                     if (response.isSuccessful) {
                         val result = response.body()
                         liveData.postValue(Resource(result))
+                        callback(result)
                     }else {
                         Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
                         liveData.postValue(Resource(RuntimeException("Falha ao obter generos")))
