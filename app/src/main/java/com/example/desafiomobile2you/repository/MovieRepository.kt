@@ -7,11 +7,13 @@ import com.example.desafiomobile2you.repository.api.MovieApi
 import com.example.desafiomobile2you.repository.entities.Genres
 import com.example.desafiomobile2you.repository.entities.Movie
 import com.example.desafiomobile2you.repository.entities.SimilarMovies
+import com.example.desafiomobile2you.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
+import java.lang.RuntimeException
 
 class MovieRepository(retrofit: Retrofit) {
 
@@ -21,66 +23,61 @@ class MovieRepository(retrofit: Retrofit) {
 
     val movieApi: MovieApi = MovieApi(retrofit)
 
-    fun getDetails(movieId: Int): LiveData<Movie?> {
-        val liveData = MutableLiveData<Movie?>()
+    fun fetchDetails(movieId: Int): LiveData<Resource<Movie, Exception>> {
+        val liveData = MutableLiveData<Resource<Movie, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
-                val response = movieApi.getDetails(it, movieId)
+                val response = movieApi.fetchDetails(it, movieId)
                 withContext(Dispatchers.Main) {
-                    if (response.isSuccessful)
-                        liveData.postValue(response.body())
-                    else
-                        Log.d(
-                            TAG,
-                            "Falhou\n ${response.body()}\n${response.errorBody()?.string()}"
-                        )
-                }
-            }
-        }
-
-        return liveData
-
-    }
-
-    fun getSimilarMovies(id: Int): MutableLiveData<SimilarMovies> {
-
-        val liveData = MutableLiveData<SimilarMovies>()
-        apiKey?.let {
-            CoroutineScope(Dispatchers.IO).launch {
-                val response = movieApi.getSimilarMovies(it, id)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful)
-                        liveData.postValue(response.body())
-                    else
-                        Log.d(
-                            TAG,
-                            "Falhou\n ${response.body()}\n${response.errorBody()?.string()}"
-                        )
+                    if (response.isSuccessful) {
+                        val result = response.body()
+                        liveData.postValue(Resource(result))
+                    }else {
+                        Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
+                        liveData.postValue(Resource(RuntimeException("Falha ao obter generos")))
+                    }
                 }
             }
         }
         return liveData
+
     }
 
-    fun getMovieGenres(): MutableLiveData<Genres> {
-
-        val liveData = MutableLiveData<Genres>()
+    fun fetchSimilarMovies(id: Int): LiveData<Resource<SimilarMovies, Exception>> {
+        val liveData = MutableLiveData<Resource<SimilarMovies, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
-                val response = movieApi.getMovieGenres(it)
+                val response = movieApi.fetchSimilarMovies(it, id)
                 withContext(Dispatchers.Main) {
-                    if (response.isSuccessful)
-                        liveData.postValue(response.body())
-                    else
-                        Log.d(
-                            TAG,
-                            "Falhou\n ${response.body()}\n${response.errorBody()?.string()}"
-                        )
+                    if (response.isSuccessful) {
+                        val result = response.body()
+                        liveData.postValue(Resource(result))
+                    }else {
+                        Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
+                        liveData.postValue(Resource(RuntimeException("Falha ao filmes similares")))
+                    }
                 }
             }
         }
         return liveData
     }
 
-
+    fun fetchMovieGenres(): LiveData<Resource<Genres, Exception>> {
+        val liveData = MutableLiveData<Resource<Genres, Exception>>()
+        apiKey?.let {
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = movieApi.fetchMovieGenres(it)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val result = response.body()
+                        liveData.postValue(Resource(result))
+                    }else {
+                        Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
+                        liveData.postValue(Resource(RuntimeException("Falha ao obter generos")))
+                    }
+                }
+            }
+        }
+        return liveData
+    }
 }

@@ -16,7 +16,7 @@ data class Movie (
     val homepage: String,
     val id: Long,
     @SerializedName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Long>,
 
 
     @SerializedName("imdb_id")
@@ -33,21 +33,12 @@ data class Movie (
 
     @SerializedName("poster_path")
     val posterPath: String,
-//
-//    @SerializedName("production_companies")
-//    val productionCompanies: List<ProductionCompany>,
-//
-//    @SerializedName("production_countries")
-//    val productionCountries: List<ProductionCountry>,
 
     @SerializedName("release_date")
     val releaseDate: String,
 
     val revenue: Long,
     val runtime: Long,
-//
-//    @SerializedName("spoken_languages")
-//    val spokenLanguages: List<SpokenLanguage>,
 
     val status: String,
     val tagline: String,
@@ -60,32 +51,3 @@ data class Movie (
     @SerializedName("vote_count")
     val voteCount: Long
 )
-
-//data class ProductionCompany (
-//    val id: Long,
-//
-//    @SerializedName("logo_path")
-//    val logoPath: String? = null,
-//
-//    val name: String,
-//
-//    @SerializedName("origin_country")
-//    val originCountry: String
-//)
-
-//data class ProductionCountry (
-//    @SerializedName("iso_3166_1")
-//    val iso3166_1: String,
-//
-//    val name: String
-//)
-
-//data class SpokenLanguage (
-//    @SerializedName("english_name")
-//    val englishName: String,
-//
-//    @SerializedName("iso_639_1")
-//    val iso639_1: String,
-//
-//    val name: String
-//)
