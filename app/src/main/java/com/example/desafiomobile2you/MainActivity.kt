@@ -2,19 +2,23 @@ package com.example.desafiomobile2you
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.desafiomobile2you.databinding.ActivityMainBinding
 import com.example.desafiomobile2you.view.adapters.MovieAdapter
+import com.example.desafiomobile2you.view.extensions.transactionFragment
+import com.example.desafiomobile2you.view.fragments.MOVIE_ID_TAG
+import com.example.desafiomobile2you.view.fragments.MovieListFragment
 import com.example.desafiomobile2you.view.viewModels.MainActivityViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), MovieAdapter.MovieAction {
+class MainActivity : AppCompatActivity() {
 
     private val TAG = this.javaClass.canonicalName
 
@@ -28,13 +32,7 @@ class MainActivity : AppCompatActivity(), MovieAdapter.MovieAction {
         )
     }
 
-    private val adapter by lazy{
-        applicationContext?.let {
-            MovieAdapter(it, actions = this)
-        } ?: throw IllegalArgumentException("contexto invalido")
-
-    }
-
+    val movieId = 750
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,27 +41,38 @@ class MainActivity : AppCompatActivity(), MovieAdapter.MovieAction {
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setDisplayShowHomeEnabled(true);
         setupBinding()
-        setupAdapter()
 
         mViewModel.movieGenres.observe(this, Observer { genreResource ->
             Log.d(TAG, "${genreResource.success}")
             if (genreResource.success) {
                 observeImage()
-                mViewModel.fetchDetails(550)
-                mViewModel.fetchSimilarMovies(550).observe(this, Observer {
-                    if(it.success){
-                        adapter.update(it.data!!.results)
-                    }
-                })
+                mViewModel.fetchDetails(movieId)
+                showMovieListFragment()
+
+            } else {
+                Toast.makeText(applicationContext, "Falha ao obter dados...", Toast.LENGTH_LONG).show()
+                finish()
             }
         })
+
+    }
+
+    private fun showMovieListFragment() {
+        val fragment = MovieListFragment()
+        with(fragment) {
+            arguments = Bundle()
+            arguments?.putInt(MOVIE_ID_TAG, movieId)
+        }
+        transactionFragment {
+            replace(R.id.fragment_container, fragment)
+        }
 
     }
 
     private fun observeImage() {
         mViewModel.selectedMovie.observe(this, Observer {
             it?.let{
-                Glide.with(this).load(getMovieImageUrl(it.posterPath, "w500")).into(mBinding.expandedImage)
+                Glide.with(this).load(mViewModel.createImageUrl(it.posterPath, "w500")).into(mBinding.expandedImage)
             }
         })
     }
@@ -73,17 +82,9 @@ class MainActivity : AppCompatActivity(), MovieAdapter.MovieAction {
         mBinding.lifecycleOwner = this
     }
 
-    private fun setupAdapter() {
-        mBinding.myRecyclerView.adapter = adapter
-    }
-
-    override fun getMovieGenreById(genreIds: List<Long>): String {
+    fun getMovieGenreById(genreIds: List<Long>): String {
         return mViewModel.getMovieGenreById(genreIds)!!.joinToString { "${it.name}" }
     }
 
-    override fun getMovieImageUrl(backdropPath: String, size: String): String {
-        val path = mViewModel.createImageUrl(backdropPath, size)
-        Log.d(TAG, "poster size: $size\npath: $path")
-        return path
-    }
+
 }

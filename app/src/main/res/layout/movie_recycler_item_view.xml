@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     app:cardElevation="10dp"
     app:cardBackgroundColor="@android:color/black"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/fragment_movie_list">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -39,9 +39,7 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 android:layout_height="match_parent"
-                tools:text="@tools:sample/lorem"
-
-                />
+                tools:text="@tools:sample/lorem"/>
             <TextView
                 android:id="@+id/similar_movie_description"
                 android:layout_width="match_parent"

@@ -49,12 +49,11 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
         )
     }
 
-    fun fetchSimilarMovies(movieId: Int): LiveData<Resource<SimilarMovies, Exception>> = movieRepository.fetchSimilarMovies(movieId)
 
-
-    fun createImageUrl (backDropPath: String, size: String): String = "https://image.tmdb.org/t/p/$size/$backDropPath"
 
     fun fetchMovieGenres(): LiveData<Resource<Genres, Exception>> = movieRepository.fetchMovieGenres()
+
+    fun createImageUrl (backDropPath: String, size: String): String = "https://image.tmdb.org/t/p/$size/$backDropPath"
 
     fun getMovieGenreById(genreIds: List<Long>): List<Genre>? = movieGenres.value?.data?.genres?.filter{genre ->  genreIds.any { id -> genre.id == id} }
 

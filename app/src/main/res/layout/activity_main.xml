@@ -62,58 +62,60 @@
         <androidx.core.widget.NestedScrollView
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:background="@android:color/black"
+            android:layout_height="match_parent">
+
             <FrameLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/linLay"
-                android:layout_gravity="start"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@android:color/black"
-                android:gravity="center_vertical"
-                app:layout_constraintTop_toTopOf="parent">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/details_padding"
-                    android:src="@drawable/ic_heart"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                <LinearLayout
+                    android:id="@+id/linLay"
                     android:layout_gravity="start"
-                    android:gravity="center"
-                    android:layout_marginStart="5dp"
-                    android:text="@{@string/movie_likes(viewModel.selectedMovieLikes)}"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <ImageView
+                        android:paddingStart="7dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_heart"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="start"
+                        android:gravity="center"
+                        android:layout_marginStart="5dp"
+                        android:text="@{@string/movie_likes(viewModel.selectedMovieLikes)}"
+                        tools:text="@tools:sample/lorem"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:rotation="90"
-                    android:layout_marginStart="@dimen/details_padding"
-                    android:src="@drawable/ic_half_circle" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:gravity="center"
-                    android:layout_gravity="start"
-                    android:text="@{@string/movie_views(viewModel.selectedMoviePopularity)}"
-                    />
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:rotation="90"
+                        android:layout_marginStart="@dimen/details_padding"
+                        android:src="@drawable/ic_half_circle" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="start"
+                        android:text="@{@string/movie_views(viewModel.selectedMoviePopularity)}"
+                        tools:text="@tools:sample/lorem"
+                        />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/myRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                tools:itemCount="3"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/movie_recycler_item_view"/>
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/fragment_container"
+                    android:layout_marginTop="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
             </FrameLayout>
+
+
         </androidx.core.widget.NestedScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
