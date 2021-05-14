@@ -42,12 +42,12 @@ data class Movie (
 
     val status: String,
     val tagline: String,
-    val title: String,
+    var title: String,
     val video: Boolean,
 
     @SerializedName("vote_average")
     val voteAverage: Double,
 
     @SerializedName("vote_count")
-    val voteCount: Long
+    val voteCount: Double
 )

@@ -27,10 +27,12 @@ class MovieRepository(retrofit: Retrofit) {
         val liveData = MutableLiveData<Resource<Movie, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
+                Log.d(TAG, "FETCHING DETAILS")
                 val response = movieApi.fetchDetails(it, movieId)
+
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        val result = response.body()
+                        val result = response.body()!!
                         liveData.postValue(Resource(result))
                         callback(result)
                     }else {
@@ -51,7 +53,7 @@ class MovieRepository(retrofit: Retrofit) {
                 val response = movieApi.fetchSimilarMovies(it, id)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        val result = response.body()
+                        val result = response.body()!!
                         liveData.postValue(Resource(result))
                     }else {
                         Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
@@ -70,7 +72,7 @@ class MovieRepository(retrofit: Retrofit) {
                 val response = movieApi.fetchMovieGenres(it)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        val result = response.body()
+                        val result = response.body()!!
                         liveData.postValue(Resource(result))
                     }else {
                         Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")

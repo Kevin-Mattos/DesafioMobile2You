@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DesafioMobile2You</string>
+    <string name="movie_likes">%1$s likes</string>
+    <string name="movie_views">%1$s views</string>
 </resources>

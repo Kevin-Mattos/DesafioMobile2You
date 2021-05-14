@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
     <data>
-
         <variable
             name="viewModel"
-            type="com.example.desafiomobile2you.viewModels.MainActivityViewModel" />
+            type="com.example.desafiomobile2you.view.viewModels.MainActivityViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -29,10 +27,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
+                app:expandedTitleMarginStart="@dimen/details_padding"
+                android:background="@android:color/black"
+                app:expandedTitleMarginBottom="15dp"
                 app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:title="@{viewModel.movieName}">
+                app:layout_scrollFlags="scroll|snap"
+                app:title="@{viewModel.selectedMovie.title}">
 
+                <com.bosphere.fadingedgelayout.FadingEdgeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:fel_edge="bottom"
+                    >
 
                 <ImageView
                     android:id="@+id/expandedImage"
@@ -41,6 +47,7 @@
                     android:scaleType="centerCrop"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.7" />
+                </com.bosphere.fadingedgelayout.FadingEdgeLayout>
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -52,23 +59,62 @@
 
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <FrameLayout
+        <androidx.core.widget.NestedScrollView
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/myImage"
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/myText"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/linLay"
+                android:layout_gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:color/black"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/details_padding"
+                    android:src="@drawable/ic_heart"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:text="@{@string/movie_likes(viewModel.selectedMovieLikes)}"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:rotation="90"
+                    android:layout_marginStart="@dimen/details_padding"
+                    android:src="@drawable/ic_half_circle" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center"
+                    android:layout_gravity="start"
+                    android:text="@{@string/movie_views(viewModel.selectedMoviePopularity)}"
+                    />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/myRecyclerView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.movieName}" />
-        </FrameLayout>
+                android:layout_marginTop="50dp"
+                tools:itemCount="3"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/movie_recycler_item_view"/>
+
+            </FrameLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
