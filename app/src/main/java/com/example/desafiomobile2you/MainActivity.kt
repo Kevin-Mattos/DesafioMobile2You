@@ -32,14 +32,14 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    val movieId = 750
+    val movieId = 550
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         setupBinding()
 
         mViewModel.movieGenres.observe(this, Observer { genreResource ->
