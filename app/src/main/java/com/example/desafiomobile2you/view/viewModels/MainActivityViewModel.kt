@@ -26,16 +26,19 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
     }
     val selectedMovie: MutableLiveData<Movie?> = MutableLiveData<Movie?>().apply { value = null }
 
-    val selectedMovieLikes: MutableLiveData<String?> = MutableLiveData<String?>().apply { value = null }
-    val selectedMoviePopularity: MutableLiveData<String?> = MutableLiveData<String?>().apply { value = null }
+    val selectedMovieLikes: MutableLiveData<String> = MutableLiveData<String>().apply { value = "0" }
+    val selectedMoviePopularity: MutableLiveData<String> = MutableLiveData<String>().apply { value = "0" }
 
-    val movieGenres: LiveData<Resource<Genres, Exception>> =  movieRepository.fetchMovieGenres()
+    val movieGenres: MutableLiveData<Resource<Genres, Exception>> = movieRepository.fetchMovieGenres()
 
     fun fetchDetails(movieId: Int) {
         movieRepository.fetchDetails(movieId) {
-            selectedMovie.postValue(it)
-            selectedMovieLikes.postValue(withSuffix(it.voteCount.toLong()))
-            selectedMoviePopularity.postValue(withSuffix(it.popularity.toLong()))
+            if(it.success) {
+                val movie = it.data!!
+                selectedMovie.postValue(movie)
+                selectedMovieLikes.postValue(withSuffix(movie.voteCount.toLong()))
+                selectedMoviePopularity.postValue(withSuffix(movie.popularity.toLong()))
+            }
         }
     }
 
@@ -49,9 +52,11 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
         )
     }
 
-
-
-    fun fetchMovieGenres(): LiveData<Resource<Genres, Exception>> = movieRepository.fetchMovieGenres()
+    fun fetchMovieGenres() {
+        movieRepository.fetchMovieGenres {
+                movieGenres.postValue(it)
+        }
+    }
 
     fun createImageUrl (backDropPath: String, size: String): String = "https://image.tmdb.org/t/p/$size/$backDropPath"
 
