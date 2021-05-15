@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         setupBinding()
         loadMovie()
+        observeImage()
 
     }
 
@@ -51,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         mViewModel.movieGenres.observe(this, Observer { genreResource ->
             Log.d(TAG, "${genreResource.success}")
             if (genreResource.success) {
-                observeImage()
                 mViewModel.fetchDetails(movieId)
                 showMovieListFragment()
             } else {
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeImage() {
-        mViewModel.selectedMovie.removeObservers(this)
+
         mViewModel.selectedMovie.observe(this, Observer {
             it?.let{
                 Glide.with(this).load(mViewModel.createImageUrl(it.posterPath, "w500")).into(mBinding.expandedImage)
