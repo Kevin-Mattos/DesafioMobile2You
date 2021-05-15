@@ -28,7 +28,7 @@ class MovieAdapter(val context: Context, val movies: MutableList<Movie> = mutabl
                 R.layout.movie_recycler_item_view,
                 parent, false
             )
-        return ViewHolder(viewCriada, actions)
+        return ViewHolder(viewCriada, actions, ::notifyListeners)
     }
 
     override fun getItemCount() = movies.size
@@ -45,18 +45,36 @@ class MovieAdapter(val context: Context, val movies: MutableList<Movie> = mutabl
         notifyItemRangeInserted(0, this.movies.size)
     }
 
+    fun notifyListeners() {
+        notifyDataSetChanged()
+    }
 
 
-    class ViewHolder (itemView: View, private val actions: MovieAction) :
+    class ViewHolder (itemView: View, private val actions: MovieAction, val notifyChanged: () -> Unit) :
         RecyclerView.ViewHolder(itemView) {
-
 
         fun bind(movie: Movie) {
             itemView.similar_movie_title.text = movie.title
             itemView.similar_movie_description.text = "${movie.releaseDate.substring(0 until 4)}, ${actions.getMovieGenreById(movie.genreIds)}"
+
+            if(movie.isSelected && !movie.wasSelected) {
+                itemView.spark_button.callOnClick()
+                movie.wasSelected = true
+            }
+            else if(movie.isSelected) {
+                itemView.spark_button.animation = null
+                itemView.spark_button.isChecked = true
+            } else {
+                movie.wasSelected = false
+            }
+
             Glide.with(itemView)
                 .load(actions.getMovieImageUrl(movie.posterPath, "w185"))
                 .into(itemView.similar_movie_image)
+            itemView.setOnClickListener {
+                movie.isSelected = !movie.isSelected
+                notifyChanged()
+            }
         }
 
     }
