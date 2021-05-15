@@ -12,12 +12,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 import retrofit2.Retrofit
 import java.lang.RuntimeException
+import java.net.ConnectException
+import java.net.UnknownHostException
 
 class MovieRepository(retrofit: Retrofit) {
 
-    private val TAG = this.javaClass.canonicalName
+    private val TAG = this.javaClass.name
 
     var apiKey: String? = "c108085f50217432acf2932b479570a7"
 
@@ -29,21 +32,12 @@ class MovieRepository(retrofit: Retrofit) {
             CoroutineScope(Dispatchers.IO).launch {
                 Log.d(TAG, "FETCHING DETAILS")
                 val response = movieApi.fetchDetails(it, movieId)
-
                 withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val result = response.body()!!
-                        liveData.postValue(Resource(result))
-                        callback(result)
-                    }else {
-                        Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
-                        liveData.postValue(Resource(RuntimeException("Falha ao obter generos")))
-                    }
+                   postResourse(liveData, response, callback)
                 }
             }
         }
         return liveData
-
     }
 
     fun fetchSimilarMovies(id: Int): LiveData<Resource<SimilarMovies, Exception>> {
@@ -52,13 +46,7 @@ class MovieRepository(retrofit: Retrofit) {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = movieApi.fetchSimilarMovies(it, id)
                 withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val result = response.body()!!
-                        liveData.postValue(Resource(result))
-                    }else {
-                        Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
-                        liveData.postValue(Resource(RuntimeException("Falha ao filmes similares")))
-                    }
+                    postResourse(liveData, response)
                 }
             }
         }
@@ -69,18 +57,26 @@ class MovieRepository(retrofit: Retrofit) {
         val liveData = MutableLiveData<Resource<Genres, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
-                val response = movieApi.fetchMovieGenres(it)
+                var response: Response<Genres?>? = movieApi.fetchMovieGenres(it)
                 withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val result = response.body()!!
-                        liveData.postValue(Resource(result))
-                    }else {
-                        Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
-                        liveData.postValue(Resource(RuntimeException("Falha ao obter generos")))
-                    }
+                    postResourse(liveData, response)
                 }
             }
         }
         return liveData
     }
+
+    fun <T> postResourse(liveData: MutableLiveData<Resource<T, Exception>>, response: Response<T?>?, callback: (T) -> Unit = {}) {
+        if (response?.isSuccessful == true) {
+            val result = response.body()!!
+            liveData.postValue(Resource(result))
+            callback(result)
+        }else if (response?.isSuccessful == false) {
+            Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
+            liveData.postValue(Resource(RuntimeException("Falha ao obter dados")))
+        } else {
+            liveData.postValue(Resource(ConnectException("Falha na conexão")))
+        }
+    }
+
 }
