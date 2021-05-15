@@ -11,7 +11,7 @@
             android:id="@+id/myRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/black"
+            android:background="@color/colorDarkScreenGray"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="3"
             tools:listitem="@layout/movie_recycler_item_view" />
