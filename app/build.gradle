@@ -64,6 +64,10 @@ dependencies {
     //spartkAnimation
     implementation 'com.github.varunest:sparkbutton:1.0.6'
 
+    //circular progress button
+    implementation 'br.com.simplepass:loading-button-android:2.2.0'
+
+
 
 
 

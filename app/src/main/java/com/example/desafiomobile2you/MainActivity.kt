@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.desafiomobile2you.databinding.ActivityMainBinding
 import com.example.desafiomobile2you.view.adapters.MovieAdapter
 import com.example.desafiomobile2you.view.extensions.transactionFragment
+import com.example.desafiomobile2you.view.fragments.FailedToLoadMovieFragment
 import com.example.desafiomobile2you.view.fragments.MOVIE_ID_TAG
 import com.example.desafiomobile2you.view.fragments.MovieListFragment
 import com.example.desafiomobile2you.view.viewModels.MainActivityViewModel
@@ -41,17 +42,23 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         setupBinding()
+        loadMovie()
+        observeImage()
 
+    }
+
+    private fun loadMovie(failedAgain: (() -> Unit)? = null) {
+        mViewModel.movieGenres.removeObservers(this)
         mViewModel.movieGenres.observe(this, Observer { genreResource ->
             Log.d(TAG, "${genreResource.success}")
             if (genreResource.success) {
-                observeImage()
                 mViewModel.fetchDetails(movieId)
                 showMovieListFragment()
-
             } else {
-                Toast.makeText(applicationContext, "Falha ao obter dados...", Toast.LENGTH_LONG).show()
-                finish()
+                if(failedAgain == null)
+                    showRetryFragment()
+                else
+                    failedAgain()
             }
         })
 
@@ -66,10 +73,23 @@ class MainActivity : AppCompatActivity() {
         transactionFragment {
             replace(R.id.fragment_container, fragment)
         }
+    }
 
+    fun retryLoading() {
+        mViewModel.fetchMovieGenres()
+    }
+
+    private fun showRetryFragment() {
+        val fragment = FailedToLoadMovieFragment()
+        fragment.observe = ::loadMovie
+        fragment.retry = ::retryLoading
+        transactionFragment {
+            replace(R.id.fragment_container, fragment)
+        }
     }
 
     private fun observeImage() {
+
         mViewModel.selectedMovie.observe(this, Observer {
             it?.let{
                 Glide.with(this).load(mViewModel.createImageUrl(it.posterPath, "w500")).into(mBinding.expandedImage)

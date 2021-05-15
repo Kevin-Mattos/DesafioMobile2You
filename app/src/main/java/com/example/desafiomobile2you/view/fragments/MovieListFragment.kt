@@ -56,7 +56,7 @@ class MovieListFragment : Fragment(), MovieAdapter.MovieAction {
         setupAdapter()
         fetchSimilarMovies()
 
-        return mBinding.root//inflater.inflate(R.layout.fragment_movie_list, container, false)
+        return mBinding.root
     }
 
 
