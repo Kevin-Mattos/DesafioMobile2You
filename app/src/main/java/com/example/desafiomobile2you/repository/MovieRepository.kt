@@ -23,15 +23,18 @@ class MovieRepository(retrofit: Retrofit) {
 
     val movieApi: MovieApi = MovieApi(retrofit)
 
-    fun fetchDetails(movieId: Int): LiveData<Resource<Movie, Exception>> {
+    fun fetchDetails(movieId: Int, callback: (Movie) -> Unit): LiveData<Resource<Movie, Exception>> {
         val liveData = MutableLiveData<Resource<Movie, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
+                Log.d(TAG, "FETCHING DETAILS")
                 val response = movieApi.fetchDetails(it, movieId)
+
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        val result = response.body()
+                        val result = response.body()!!
                         liveData.postValue(Resource(result))
+                        callback(result)
                     }else {
                         Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
                         liveData.postValue(Resource(RuntimeException("Falha ao obter generos")))
@@ -50,7 +53,7 @@ class MovieRepository(retrofit: Retrofit) {
                 val response = movieApi.fetchSimilarMovies(it, id)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        val result = response.body()
+                        val result = response.body()!!
                         liveData.postValue(Resource(result))
                     }else {
                         Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
@@ -69,7 +72,7 @@ class MovieRepository(retrofit: Retrofit) {
                 val response = movieApi.fetchMovieGenres(it)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        val result = response.body()
+                        val result = response.body()!!
                         liveData.postValue(Resource(result))
                     }else {
                         Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")

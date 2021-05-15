@@ -13,20 +13,20 @@ class MovieApi (retrofit: Retrofit) {
 
     val movieService = retrofit.create(MovieService::class.java)
 
-    fun fetchDetails(apiKey: String, id: Int) : Response<Movie> {
+    fun fetchDetails(apiKey: String, id: Int) : Response<Movie?> {
         val call = movieService.getDetails(id, apiKey)
         Log.d(TAG, "${call.request().url()}")
         return call.execute()
     }
 
-    fun fetchSimilarMovies(apiKey: String, id: Int): Response<SimilarMovies> {
+    fun fetchSimilarMovies(apiKey: String, id: Int): Response<SimilarMovies?> {
 
         val call = movieService.getSimilarMovies(id, apiKey)
         Log.d(TAG, "${call.request().url()}")
         return call.execute()
     }
 
-    fun fetchMovieGenres(apiKey: String): Response<Genres> {
+    fun fetchMovieGenres(apiKey: String): Response<Genres?> {
         val call = movieService.getMovieGenres(apiKey)
         Log.d(TAG, "${call.request().url()}")
         return call.execute()
