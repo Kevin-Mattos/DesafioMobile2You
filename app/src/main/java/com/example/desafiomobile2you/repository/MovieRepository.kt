@@ -14,9 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import retrofit2.Retrofit
-import java.lang.RuntimeException
 import java.net.ConnectException
-import java.net.UnknownHostException
 
 class MovieRepository(retrofit: Retrofit) {
 
@@ -30,7 +28,7 @@ class MovieRepository(retrofit: Retrofit) {
         val liveData = MutableLiveData<Resource<Movie, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
-                Log.d(TAG, "FETCHING DETAILS")
+                Log.i(TAG, "obtendo detalhes do filme com id $movieId")
                 val response = movieApi.fetchDetails(it, movieId)
                 withContext(Dispatchers.Main) {
                    postResourse(liveData, response, callback)
@@ -44,6 +42,7 @@ class MovieRepository(retrofit: Retrofit) {
         val liveData = MutableLiveData<Resource<SimilarMovies, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
+                Log.i(TAG, "obtendo filmes similares ao filme com id $id")
                 val response = movieApi.fetchSimilarMovies(it, id)
                 withContext(Dispatchers.Main) {
                     postResourse(liveData, response, callback)
@@ -57,6 +56,7 @@ class MovieRepository(retrofit: Retrofit) {
         val liveData = MutableLiveData<Resource<Genres, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
+                Log.i(TAG, "obtendo generos")
                 var response: Response<Genres?>? = movieApi.fetchMovieGenres(it)
                 withContext(Dispatchers.Main) {
                     postResourse(liveData, response, callback)
@@ -73,11 +73,12 @@ class MovieRepository(retrofit: Retrofit) {
             liveData.postValue(resource)
             callback(resource)
         }else if (response?.isSuccessful == false) {
-            Log.d(TAG,"Falhou\n ${response.body()}\n${response.errorBody()?.string()}")
+            Log.d(TAG,"Falhou:\n${response.errorBody()?.string()}")
             val resource = Resource<T, Exception>(RuntimeException("Falha ao obter dados"))
             liveData.postValue(resource)
             callback(resource)
         } else {
+            Log.i(TAG,"Falha na conexão")
             val resource = Resource<T, Exception>(ConnectException("Falha na conexão"))
             liveData.postValue(resource)
             callback(resource)

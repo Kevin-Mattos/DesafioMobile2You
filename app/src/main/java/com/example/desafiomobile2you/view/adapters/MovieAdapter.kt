@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.desafiomobile2you.R
 import com.example.desafiomobile2you.repository.entities.Movie
 import kotlinx.android.synthetic.main.movie_recycler_item_view.view.*

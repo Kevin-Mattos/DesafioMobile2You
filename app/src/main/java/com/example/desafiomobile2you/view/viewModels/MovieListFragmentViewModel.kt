@@ -6,8 +6,6 @@ import androidx.lifecycle.LiveData
 import com.example.desafiomobile2you.repository.MovieRepository
 import com.example.desafiomobile2you.repository.entities.SimilarMovies
 import com.example.desafiomobile2you.util.Resource
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MovieListFragmentViewModel(application: Application, val movieRepository: MovieRepository): AndroidViewModel(application) {
 
