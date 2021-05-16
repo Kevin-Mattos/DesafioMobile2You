@@ -32,22 +32,23 @@ class MainActivityViewModelTest {
     fun setUp() {
 
         movieRepository = Mockito.mock(MovieRepository::class.java)
-        Mockito.`when`(movieRepository.fetchMovieGenres()).thenAnswer() {
-            MutableLiveData<Resource<Genres, Exception>>().apply { value = Resource(Genres(listOf())) }
+        whenever(movieRepository.fetchMovieGenres()).thenAnswer {
+            MutableLiveData<Resource<Genres, Exception>>().apply {
+                value = Resource(Genres(listOf()))
+            }
         }
         viewModel = MainActivityViewModel(Application(), movieRepository)
 
     }
 
-
     @Test
-    fun FetchDetails_deve_alterar_valores_de_acordo_com_filme_recebido_quando_sucesso() {
+    fun fetchDetails_deve_alterar_valores_de_acordo_com_filme_recebido_quando_sucesso() {
         //prepare
         val expectedPopularity: String = "550"
         val expectedVoteCount: String = "450"
         val movie = mock<Movie> {
-            on {id} doReturn 550
-            on { popularity } doReturn  expectedPopularity.toDouble()
+            on { id } doReturn 550
+            on { popularity } doReturn expectedPopularity.toDouble()
             on { voteCount } doReturn expectedVoteCount.toDouble()
         }
         whenever(movieRepository.fetchDetails(any(), any())).then {
@@ -70,24 +71,18 @@ class MainActivityViewModelTest {
     }
 
     @Test
-    fun FetchDetails_nao_deve_alterar_valores_de_acordo_com_filme_recebido_quando_falha() {
+    fun fetchDetails_deve_receber_mensagem_de_erro_quando_falha() {
         //prepare
-        val expectedPopularity = "550"
-        val expectedVoteCount = "450"
-        val movie = mock<Movie> {
-            on {id} doReturn 550
-            on { popularity } doReturn  expectedPopularity.toDouble()
-            on { voteCount } doReturn expectedVoteCount.toDouble()
-        }
+        val errorMessage = "falha ao obter filme"
         whenever(movieRepository.fetchDetails(any(), any())).then {
             val liveData = MutableLiveData<Resource<Movie, Exception>>()
-            liveData.value = Resource(Exception("Falha ao obter filme"))
+            liveData.value = Resource(Exception(errorMessage))
             it.getArgument<((Resource<Movie, Exception>) -> Unit)>(1)(liveData.value!!)
             liveData
         }
 
         //action
-        viewModel.fetchDetails(movie.id.toInt())
+        viewModel.fetchDetails(5)
 
 
         //assertion
@@ -102,8 +97,9 @@ class MainActivityViewModelTest {
     fun fetchMovieGenres_deve_alterar_generos_de_acordo_com_generos_recebidos_quando_sucesso() {
         //prepare
 
+        val expectedGenreName = "nome do genero"
         val genres = mock<Genres> {
-            on { genres } doReturn listOf(Genre(1, "nome do genero"))
+            on { genres } doReturn listOf(Genre(1, expectedGenreName))
         }
         whenever(movieRepository.fetchMovieGenres(any())).then {
             val liveData = MutableLiveData<Resource<Genres, Exception>>()
@@ -118,6 +114,7 @@ class MainActivityViewModelTest {
 
         //assertion
         Assert.assertTrue(viewModel.movieGenres.value!!.data!!.genres.isNotEmpty())
+        Assert.assertEquals(expectedGenreName, viewModel.movieGenres.value!!.data!!.genres[0].name)
         Assert.assertNull(viewModel.movieGenres.value!!.error)
 
     }
@@ -127,11 +124,11 @@ class MainActivityViewModelTest {
 
         //prepare
         val expectedErrorMessage = "falha ao obter generos"
-       whenever(movieRepository.fetchMovieGenres(any())).then {
+        whenever(movieRepository.fetchMovieGenres(any())).then {
             val liveData = MutableLiveData<Resource<Genres, Exception>>()
             liveData.value = Resource(Exception(expectedErrorMessage))
             it.getArgument<((Resource<Genres, Exception>) -> Unit)>(0)(liveData.value!!)
-           liveData
+            liveData
         }
 
         //action
@@ -142,9 +139,6 @@ class MainActivityViewModelTest {
         Assert.assertNotNull(viewModel.movieGenres.value!!.error)
 
     }
-
-
-
 
 
 }

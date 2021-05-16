@@ -1,4 +1,4 @@
-package com.example.desafiomobile2you.repository.factories
+package com.example.desafiomobile2you.view.viewModels.factories
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
