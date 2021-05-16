@@ -50,4 +50,8 @@ data class Movie (
 
     @SerializedName("vote_count")
     val voteCount: Double
-)
+) {
+    var isSelected = false
+
+    var wasSelected = false
+}

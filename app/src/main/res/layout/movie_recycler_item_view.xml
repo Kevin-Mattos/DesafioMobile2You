@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingEnd="50dp"
             android:gravity="center_vertical"
             android:layout_centerInParent="true"
             android:layout_toEndOf="@id/similar_movie_image">
@@ -47,12 +48,23 @@
                 android:layout_height="match_parent"
                 android:textColor="@android:color/white"
                 tools:text="@tools:sample/lorem"
-
                 />
 
 
         </LinearLayout>
 
+        <com.varunest.sparkbutton.SparkButton
+            android:id="@+id/spark_button"
+            android:clickable="false"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="@dimen/margin_from_start"
+            app:sparkbutton_activeImage="@drawable/ic_check_circle_outline"
+            app:sparkbutton_inActiveImage="@color/black"
+            app:sparkbutton_primaryColor="@android:color/white"
+            app:sparkbutton_secondaryColor="@android:color/white"
+            android:layout_alignParentEnd="true"
+            app:sparkbutton_iconSize="24dp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
