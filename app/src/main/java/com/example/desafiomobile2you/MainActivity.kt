@@ -6,8 +6,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.desafiomobile2you.databinding.ActivityMainBinding
+import com.example.desafiomobile2you.repository.MovieRepository
+import com.example.desafiomobile2you.repository.factories.MainActivityViewModelFactory
 import com.example.desafiomobile2you.view.adapters.MovieAdapter
 import com.example.desafiomobile2you.view.extensions.transactionFragment
 import com.example.desafiomobile2you.view.fragments.FailedToLoadMovieFragment
@@ -18,6 +21,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,9 +33,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val mViewModel: MainActivityViewModel by lazy {
-        ViewModelProvider.AndroidViewModelFactory(application).create(
-            MainActivityViewModel::class.java
-        )
+
+        val retrofit =
+            Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("https://api.themoviedb.org/3/")
+                .build()
+
+        val factory = MainActivityViewModelFactory(application, MovieRepository(retrofit))
+        ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
     }
 
     val movieId = 550
