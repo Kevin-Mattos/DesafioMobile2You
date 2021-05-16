@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="small_icon_size">16dp</dimen>
+    <dimen name="details_padding">15dp</dimen>
+    <dimen name="margin_from_start">7dp</dimen>
+</resources>
