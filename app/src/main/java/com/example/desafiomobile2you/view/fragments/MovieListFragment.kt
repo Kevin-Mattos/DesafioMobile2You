@@ -12,9 +12,14 @@ import com.example.desafiomobile2you.MainActivity
 import com.example.desafiomobile2you.R
 import com.example.desafiomobile2you.databinding.ActivityMainBinding
 import com.example.desafiomobile2you.databinding.FragmentMovieListBinding
+import com.example.desafiomobile2you.repository.MovieRepository
 import com.example.desafiomobile2you.view.adapters.MovieAdapter
 import com.example.desafiomobile2you.view.viewModels.MainActivityViewModel
 import com.example.desafiomobile2you.view.viewModels.MovieListFragmentViewModel
+import com.example.desafiomobile2you.view.viewModels.factories.MainActivityViewModelFactory
+import com.example.desafiomobile2you.view.viewModels.factories.MovieListFragmentViewModelFactory
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 const val MOVIE_ID_TAG = "get_movie_id"
 class MovieListFragment : Fragment(), MovieAdapter.MovieAction {
@@ -26,9 +31,15 @@ class MovieListFragment : Fragment(), MovieAdapter.MovieAction {
     val TAG = this.javaClass.name
 
     private val mViewModel: MovieListFragmentViewModel by lazy {
-        ViewModelProvider.AndroidViewModelFactory(mMainActivity.application).create(
-            MovieListFragmentViewModel::class.java
-        )
+
+        val retrofit =
+            Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("https://api.themoviedb.org/3/")
+                .build()
+
+        val factory = MovieListFragmentViewModelFactory(mMainActivity.application, MovieRepository(retrofit))
+        ViewModelProvider(this, factory).get(MovieListFragmentViewModel::class.java)
     }
 
     private val adapter by lazy{

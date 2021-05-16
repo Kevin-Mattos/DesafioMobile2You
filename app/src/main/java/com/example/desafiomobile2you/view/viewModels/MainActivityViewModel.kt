@@ -14,16 +14,8 @@ import com.example.desafiomobile2you.util.Resource
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivityViewModel(application: Application): AndroidViewModel(application) {
+class MainActivityViewModel(application: Application, val movieRepository: MovieRepository): AndroidViewModel(application) {
 
-    val retrofit =
-        Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://api.themoviedb.org/3/")
-            .build()
-    val movieRepository by lazy {
-        MovieRepository(retrofit)
-    }
     val selectedMovie: MutableLiveData<Movie?> = MutableLiveData<Movie?>().apply { value = null }
 
     val selectedMovieLikes: MutableLiveData<String> = MutableLiveData<String>().apply { value = "0" }
