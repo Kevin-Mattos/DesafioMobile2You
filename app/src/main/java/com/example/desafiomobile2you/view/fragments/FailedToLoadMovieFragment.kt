@@ -1,14 +1,12 @@
 package com.example.desafiomobile2you.view.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.example.desafiomobile2you.R
+import androidx.fragment.app.Fragment
 import com.example.desafiomobile2you.databinding.FragmentFailedToLoadMovieBinding
-import com.example.desafiomobile2you.databinding.FragmentMovieListBinding
+
 class FailedToLoadMovieFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

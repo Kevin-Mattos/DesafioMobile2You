@@ -16,8 +16,8 @@ import org.junit.rules.TestRule
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.whenever
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 class MainActivityViewModelTest {
 

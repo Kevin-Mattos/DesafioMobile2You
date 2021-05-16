@@ -24,7 +24,7 @@ interface MovieService {
     fun getSimilarMovies(@Path("id") id: Int, @Query("api_key") apiKey: String): Call<SimilarMovies?>
 
     @Headers( "Content-Type: application/json;charset=UTF-8")
-    @GET("genre/movie/list")
+    @GET("genre/$route/list")
     fun getMovieGenres(@Query("api_key") apiKey: String): Call<Genres?>
 
 

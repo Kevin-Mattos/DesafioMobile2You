@@ -8,18 +8,18 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.desafiomobile2you.databinding.ActivityMainBinding
 import com.example.desafiomobile2you.repository.MovieRepository
-import com.example.desafiomobile2you.view.viewModels.factories.MainActivityViewModelFactory
 import com.example.desafiomobile2you.view.extensions.transactionFragment
 import com.example.desafiomobile2you.view.fragments.FailedToLoadMovieFragment
 import com.example.desafiomobile2you.view.fragments.MOVIE_ID_TAG
 import com.example.desafiomobile2you.view.fragments.MovieListFragment
 import com.example.desafiomobile2you.view.viewModels.MainActivityViewModel
+import com.example.desafiomobile2you.view.viewModels.factories.MainActivityViewModelFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = this.javaClass.canonicalName
+    private val TAG = this.javaClass.name
 
     private val mBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -54,11 +54,11 @@ class MainActivity : AppCompatActivity() {
     private fun loadMovie(failedAgain: (() -> Unit)? = null) {
         mViewModel.movieGenres.removeObservers(this)
         mViewModel.movieGenres.observe(this, Observer { genreResource ->
-            Log.d(TAG, "${genreResource.success}")
             if (genreResource.success) {
                 mViewModel.fetchDetails(movieId)
                 showMovieListFragment()
             } else {
+                Log.d(TAG, "falha ao obter generos: ${genreResource.error}")
                 if(failedAgain == null)
                     showRetryFragment()
                 else
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getMovieGenreById(genreIds: List<Long>): String {
-        return mViewModel.getMovieGenreById(genreIds)!!.joinToString { "${it.name}" }
+        return mViewModel.getMovieGenreById(genreIds)!!.joinToString { it.name }
     }
 
 
