@@ -66,7 +66,7 @@ class MovieListFragment : Fragment(), MovieAdapter.MovieAction {
 
 
     private fun fetchSimilarMovies() {
-        mViewModel.fetchSimilarMovies().observe(this, Observer {
+        mViewModel.fetchSimilarMovies().observe(viewLifecycleOwner, Observer {
             if(it.success){
                 adapter.update(it.data!!.results)
             }

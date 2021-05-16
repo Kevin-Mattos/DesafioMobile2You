@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
     }
 
-    val movieId = 550
+    val movieId = 10567
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
