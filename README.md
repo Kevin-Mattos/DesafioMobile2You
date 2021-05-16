@@ -16,6 +16,7 @@ Escolhi a arquitetura MVVM pois é a que estou mais familiarizado.
 
 ## Design
 Tentei deixar o mais parecido possível com a tela, mas utilizando um padrão mais parecido com o do android, como usar uma appbar colapsável e o voltar padrão. Outros detalhes que deixei diferente foi o ícone de selecionado nos filmes similares, e o ícone de like, que fica na parte de cima junto ao título no exemplo, optei por deixá-lo centralizado caso o título do filme ocupe mais de uma linha.
+
 ![image](https://user-images.githubusercontent.com/60194291/118407545-93063680-b657-11eb-9e97-d2e16767db66.png) vs ![image](https://user-images.githubusercontent.com/60194291/118407566-b204c880-b657-11eb-89ac-9d1197c0cdde.png)
 ## Idioma
 Dependendo no idioma do celular, irá buscar os filme baseado nele. Porém os resources só suportam pt-br e en-us. Caso seja outro irá exibi-los em inglês.
