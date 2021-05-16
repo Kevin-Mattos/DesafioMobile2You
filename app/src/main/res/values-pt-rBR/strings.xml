@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="retry_button">Tentar Novamente</string>
+    <string name="movie_views">%1$s visualizações</string>
+</resources>
