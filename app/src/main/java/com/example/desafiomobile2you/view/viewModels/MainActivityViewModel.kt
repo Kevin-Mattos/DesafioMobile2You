@@ -8,12 +8,16 @@ import com.example.desafiomobile2you.repository.entities.Genre
 import com.example.desafiomobile2you.repository.entities.Genres
 import com.example.desafiomobile2you.repository.entities.Movie
 import com.example.desafiomobile2you.util.Resource
+import org.koin.java.KoinJavaComponent.inject
 
-class MainActivityViewModel(application: Application, val movieRepository: MovieRepository): AndroidViewModel(application) {
+class MainActivityViewModel(application: Application): AndroidViewModel(application) {
+
+    val movieRepository: MovieRepository by inject(MovieRepository::class.java)
 
     val selectedMovie: MutableLiveData<Movie?> = MutableLiveData<Movie?>().apply { value = null }
 
     val selectedMovieLikes: MutableLiveData<String> = MutableLiveData<String>().apply { value = "0" }
+
     val selectedMoviePopularity: MutableLiveData<String> = MutableLiveData<String>().apply { value = "0" }
 
     val movieGenres: MutableLiveData<Resource<Genres, Exception>> = movieRepository.fetchMovieGenres()

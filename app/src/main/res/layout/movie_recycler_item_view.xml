@@ -1,78 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardElevation="10dp"
-    app:cardBackgroundColor="@color/colorDarkScreenGray"
-    tools:showIn="@layout/fragment_movie_list">
+<layout>
 
-    <RelativeLayout
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        app:cardBackgroundColor="@color/colorDarkScreenGray"
+        app:cardElevation="10dp"
+        tools:showIn="@layout/fragment_movie_list">
 
-        <ImageView
-            android:id="@+id/similar_movie_image"
-            android:layout_width="75dp"
-            android:layout_height="100dp"
-            android:padding="@dimen/margin_from_start"
-            android:elevation="30dp"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="start"
-            android:layout_centerInParent="true"
-            android:contentDescription="TODO" />
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingEnd="50dp"
-            android:gravity="center_vertical"
-            android:layout_centerInParent="true"
-            android:layout_toEndOf="@id/similar_movie_image">
+            android:gravity="center">
 
-            <TextView
-                android:id="@+id/similar_movie_title"
+            <ImageView
+                android:id="@+id/similar_movie_image"
+                android:layout_width="75dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_gravity="start"
+                android:contentDescription="TODO"
+                android:elevation="30dp"
+                android:padding="@dimen/margin_from_start" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:textSize="8pt"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_height="match_parent"
-                tools:text="@tools:sample/lorem"/>
-            <TextView
-                android:id="@+id/similar_movie_description"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@id/similar_movie_image"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingEnd="50dp">
+
+                <TextView
+                    android:id="@+id/similar_movie_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@android:color/white"
+                    android:textSize="8pt"
+                    android:textStyle="bold"
+                    tools:text="@tools:sample/lorem" />
+
+                <TextView
+                    android:id="@+id/similar_movie_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@android:color/white"
+                    tools:text="@tools:sample/lorem" />
+
+
+            </LinearLayout>
+
+            <com.varunest.sparkbutton.SparkButton
+                android:id="@+id/spark_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/margin_from_start"
+                android:clickable="false"
+                app:sparkbutton_activeImage="@drawable/ic_check_circle_outline"
+                app:sparkbutton_iconSize="24dp"
+                app:sparkbutton_inActiveImage="@color/black"
+                app:sparkbutton_primaryColor="@android:color/white"
+                app:sparkbutton_secondaryColor="@android:color/white" />
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="@android:color/white"
-                tools:text="@tools:sample/lorem"
-                />
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@id/similar_movie_image"
+                android:background="@color/colorVeryLightGray" />
 
+        </RelativeLayout>
 
-        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-        <com.varunest.sparkbutton.SparkButton
-            android:id="@+id/spark_button"
-            android:clickable="false"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="@dimen/margin_from_start"
-            app:sparkbutton_activeImage="@drawable/ic_check_circle_outline"
-            app:sparkbutton_inActiveImage="@color/black"
-            app:sparkbutton_primaryColor="@android:color/white"
-            app:sparkbutton_secondaryColor="@android:color/white"
-            android:layout_alignParentEnd="true"
-            app:sparkbutton_iconSize="24dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_toEndOf="@id/similar_movie_image"
-            android:background="@color/colorVeryLightGray"
-            android:layout_alignParentBottom="true"
-            />
-
-    </RelativeLayout>
-
-</androidx.cardview.widget.CardView>
+</layout>

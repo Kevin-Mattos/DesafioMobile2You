@@ -1,14 +1,13 @@
 package com.example.desafiomobile2you.view.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.desafiomobile2you.R
+import com.example.desafiomobile2you.databinding.MovieRecyclerItemViewBinding
 import com.example.desafiomobile2you.repository.entities.Movie
-import kotlinx.android.synthetic.main.movie_recycler_item_view.view.*
 
 class MovieAdapter(val context: Context, val movies: MutableList<Movie> = mutableListOf(), val actions: MovieAction):
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
@@ -22,58 +21,47 @@ class MovieAdapter(val context: Context, val movies: MutableList<Movie> = mutabl
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        val viewCriada = LayoutInflater.from(context)
+        val viewCriada = MovieRecyclerItemViewBinding
             .inflate(
-                R.layout.movie_recycler_item_view,
-                parent, false
+                LayoutInflater.from(context), parent, false
             )
-        return ViewHolder(viewCriada, actions, ::notifyListeners)
+        return ViewHolder(viewCriada, actions)
     }
 
     override fun getItemCount() = movies.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val noticia = movies[position]
-        holder.bind(noticia)
+        val movie = movies[position]
+        holder.bind(movie)
     }
 
     fun update(movies: List<Movie>) {
-        notifyItemRangeRemoved(0, this.movies.size)
         this.movies.clear()
         this.movies.addAll(movies)
-        notifyItemRangeInserted(0, this.movies.size)
-    }
-
-    fun notifyListeners() {
         notifyDataSetChanged()
     }
 
-
-    class ViewHolder (itemView: View, private val actions: MovieAction, val notifyChanged: () -> Unit) :
-        RecyclerView.ViewHolder(itemView) {
+    class ViewHolder (private val mBinding: MovieRecyclerItemViewBinding, private val actions: MovieAction) :
+        RecyclerView.ViewHolder(mBinding.root) {
 
         fun bind(movie: Movie) {
-            itemView.similar_movie_title.text = movie.title
-            itemView.similar_movie_description.text = "${movie.releaseDate.substring(0 until 4)}, ${actions.getMovieGenreById(movie.genreIds)}"
 
-            if(movie.isSelected && !movie.wasSelected) {
-                itemView.spark_button.callOnClick()
-                movie.wasSelected = true
-            }
-            else if(movie.isSelected) {
-                itemView.spark_button.animation = null
-                itemView.spark_button.isChecked = true
-            } else {
-                movie.wasSelected = false
+            with(mBinding) {
+                similarMovieTitle.text = movie.title
+                similarMovieDescription.text = "${movie.releaseDate.substring(0 until 4)}, ${actions.getMovieGenreById(movie.genreIds)}"
+
+                Glide.with(mBinding.root)
+                    .load(actions.getMovieImageUrl(movie.posterPath, "w185"))
+                    .into(similarMovieImage)
+
+                root.setOnClickListener {
+                    movie.isSelected = !movie.isSelected
+                    sparkButton.callOnClick()
+
+                }
+
             }
 
-            Glide.with(itemView)
-                .load(actions.getMovieImageUrl(movie.posterPath, "w185"))
-                .into(itemView.similar_movie_image)
-            itemView.setOnClickListener {
-                movie.isSelected = !movie.isSelected
-                notifyChanged()
-            }
         }
 
     }

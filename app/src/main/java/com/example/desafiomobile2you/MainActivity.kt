@@ -13,9 +13,8 @@ import com.example.desafiomobile2you.view.fragments.FailedToLoadMovieFragment
 import com.example.desafiomobile2you.view.fragments.MOVIE_ID_TAG
 import com.example.desafiomobile2you.view.fragments.MovieListFragment
 import com.example.desafiomobile2you.view.viewModels.MainActivityViewModel
-import com.example.desafiomobile2you.view.viewModels.factories.MainActivityViewModelFactory
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import org.koin.core.module.Module
+import org.koin.dsl.module
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,15 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val mViewModel: MainActivityViewModel by lazy {
-
-        val retrofit =
-            Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://api.themoviedb.org/3/")
-                .build()
-
-        val factory = MainActivityViewModelFactory(application, MovieRepository(retrofit))
-        ViewModelProvider(this, factory).get(MainActivityViewModel::class.java)
+        ViewModelProvider(this).get(MainActivityViewModel::class.java)
     }
 
     val movieId = 10567
@@ -109,6 +100,5 @@ class MainActivity : AppCompatActivity() {
     fun getMovieGenreById(genreIds: List<Long>): String {
         return mViewModel.getMovieGenreById(genreIds)!!.joinToString { it.name }
     }
-
 
 }

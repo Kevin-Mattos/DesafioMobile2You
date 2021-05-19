@@ -12,7 +12,6 @@ import com.example.desafiomobile2you.databinding.FragmentMovieListBinding
 import com.example.desafiomobile2you.repository.MovieRepository
 import com.example.desafiomobile2you.view.adapters.MovieAdapter
 import com.example.desafiomobile2you.view.viewModels.MovieListFragmentViewModel
-import com.example.desafiomobile2you.view.viewModels.factories.MovieListFragmentViewModelFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -24,15 +23,7 @@ class MovieListFragment : Fragment(), MovieAdapter.MovieAction {
     }
 
     private val mViewModel: MovieListFragmentViewModel by lazy {
-
-        val retrofit =
-            Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://api.themoviedb.org/3/")
-                .build()
-
-        val factory = MovieListFragmentViewModelFactory(mMainActivity.application, MovieRepository(retrofit))
-        ViewModelProvider(this, factory).get(MovieListFragmentViewModel::class.java)
+        ViewModelProvider(this).get(MovieListFragmentViewModel::class.java)
     }
 
     private val adapter by lazy{
