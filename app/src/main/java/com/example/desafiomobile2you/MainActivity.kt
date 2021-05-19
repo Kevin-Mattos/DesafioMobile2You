@@ -17,26 +17,41 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = this.javaClass.name
 
-    private val mBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
+    private lateinit var mBinding: ActivityMainBinding
 
-    private val mViewModel: MainActivityViewModel by lazy {
-        ViewModelProvider(this).get(MainActivityViewModel::class.java)
-    }
+    private lateinit var mViewModel: MainActivityViewModel
 
     val movieId = 10567
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupBinding()
+        setupViewModel()
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        setupBinding()
         loadMovie()
         observeImage()
 
+    }
+
+    fun retryLoading() {
+        mViewModel.fetchMovieGenres()
+    }
+
+    fun getMovieGenreById(genreIds: List<Long>): String {
+        return mViewModel.getMovieGenreById(genreIds)
+    }
+
+    private fun setupBinding() {
+        mBinding = ActivityMainBinding.inflate(layoutInflater)
+        mBinding.lifecycleOwner = this
+    }
+
+    private fun setupViewModel() {
+        mViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        mBinding.viewModel = mViewModel
     }
 
     private fun loadMovie(failedAgain: (() -> Unit)? = null) {
@@ -67,10 +82,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun retryLoading() {
-        mViewModel.fetchMovieGenres()
-    }
-
     private fun showRetryFragment() {
         val fragment = FailedToLoadMovieFragment()
         fragment.observe = ::loadMovie
@@ -81,21 +92,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeImage() {
-
         mViewModel.selectedMovie.observe(this, Observer {
             it?.let{
                 Glide.with(this).load(mViewModel.createImageUrl(it.posterPath, "w500")).into(mBinding.expandedImage)
             }
         })
-    }
-
-    private fun setupBinding() {
-        mBinding.viewModel = mViewModel
-        mBinding.lifecycleOwner = this
-    }
-
-    fun getMovieGenreById(genreIds: List<Long>): String {
-        return mViewModel.getMovieGenreById(genreIds)!!.joinToString { it.name }
     }
 
 }

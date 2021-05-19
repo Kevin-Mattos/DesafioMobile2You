@@ -29,8 +29,6 @@ class MovieListFragmentViewModelTest {
 
     lateinit var movieRepository: MovieRepository
 
-
-
     @Before
     fun setUp() {
 
@@ -49,12 +47,10 @@ class MovieListFragmentViewModelTest {
 
     }
 
-
     @After
     fun after() {
         stopKoin()
     }
-
 
     @Test
     fun fetchSimilarMovies_deve_alterar_valores_de_acordo_com_filmes_similares_recebido_quando_sucesso() {

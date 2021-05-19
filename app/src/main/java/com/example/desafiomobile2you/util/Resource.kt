@@ -1,6 +1,6 @@
 package com.example.desafiomobile2you.util
 
-class Resource<T, TError : kotlin.Exception> {
+class Resource<T, TError : Exception> {
 
     var error: String? = null
     var data: T? = null

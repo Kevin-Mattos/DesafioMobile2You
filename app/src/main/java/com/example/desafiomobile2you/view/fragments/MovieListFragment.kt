@@ -15,43 +15,58 @@ import com.example.desafiomobile2you.view.viewModels.MovieListFragmentViewModel
 const val MOVIE_ID_TAG = "get_movie_id"
 class MovieListFragment : Fragment(), MovieAdapter.MovieAction {
 
-    private val mMainActivity: MainActivity by lazy {
-        activity as MainActivity
-    }
+    private lateinit var mMainActivity: MainActivity
 
-    private val mViewModel: MovieListFragmentViewModel by lazy {
-        ViewModelProvider(this).get(MovieListFragmentViewModel::class.java)
-    }
+    private lateinit var mViewModel: MovieListFragmentViewModel
 
-    private val adapter by lazy{
-        mMainActivity.applicationContext?.let {
-            MovieAdapter(it, actions = this)
-        } ?: throw IllegalArgumentException("contexto invalido")
+    private lateinit var adapter: MovieAdapter
 
-    }
-
-    lateinit var mBinding: FragmentMovieListBinding
+    private lateinit var mBinding: FragmentMovieListBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            mViewModel.selectedMovieId = it.getInt(MOVIE_ID_TAG)
-        }
+        setupMainActivity()
+        setupViewModel()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mBinding = FragmentMovieListBinding.inflate(inflater, container, false)
+        setupBinding(inflater, container)
         setupAdapter()
         fetchSimilarMovies()
-
         return mBinding.root
     }
 
+    override fun getMovieImageUrl(backdropPath: String, size: String): String = mViewModel.createImageUrl(backdropPath, size)
 
+    override fun getMovieGenreById(genreIds: List<Long>): String {
+        return mMainActivity.getMovieGenreById(genreIds)
+    }
+
+    private fun setupViewModel() {
+        mViewModel = ViewModelProvider(this).get(MovieListFragmentViewModel::class.java)
+        arguments?.let {
+            mViewModel.selectedMovieId = it.getInt(MOVIE_ID_TAG, 0)
+        }
+    }
+
+    private fun setupMainActivity() {
+        mMainActivity = activity as MainActivity
+    }
+
+    private fun setupBinding(inflater: LayoutInflater, container: ViewGroup?) {
+        mBinding = FragmentMovieListBinding.inflate(inflater, container, false)
+    }
+
+    private fun setupAdapter() {
+        adapter =  mMainActivity.applicationContext?.let {
+            MovieAdapter(it, actions = this)
+        } ?: throw IllegalArgumentException("contexto invalido")
+        mBinding.myRecyclerView.adapter = adapter
+    }
 
     private fun fetchSimilarMovies() {
         mViewModel.fetchSimilarMovies().observe(viewLifecycleOwner, Observer {
@@ -60,17 +75,5 @@ class MovieListFragment : Fragment(), MovieAdapter.MovieAction {
             }
         })
     }
-
-    private fun setupAdapter() {
-        mBinding.myRecyclerView.adapter = adapter
-    }
-
-
-    override fun getMovieImageUrl(backdropPath: String, size: String): String = mViewModel.createImageUrl(backdropPath, size)
-
-    override fun getMovieGenreById(genreIds: List<Long>): String {
-       return mMainActivity.getMovieGenreById(genreIds)
-    }
-
 
 }

@@ -25,22 +25,12 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
     fun fetchDetails(movieId: Int) {
         movieRepository.fetchDetails(movieId) {
             if(it.success) {
-                val movie = it.data!!
+                val movie = it.data
                 selectedMovie.postValue(movie)
-                selectedMovieLikes.postValue(withSuffix(movie.voteCount.toLong()))
-                selectedMoviePopularity.postValue(withSuffix(movie.popularity.toLong()))
+                selectedMovieLikes.postValue(withSuffix(movie?.voteCount?.toLong() ?: 0))
+                selectedMoviePopularity.postValue(withSuffix(movie?.popularity?.toLong() ?: 0))
             }
         }
-    }
-
-    fun withSuffix(count: Long): String? {
-        if (count < 1000) return "" + count
-        val exp: Int = (Math.log(count.toDouble()) / Math.log(1000.0)).toInt()
-        return String.format(
-            "%.1f%c",
-            count / Math.pow(1000.0, exp.toDouble()),
-            "kMGTPE"[exp - 1]
-        )
     }
 
     fun fetchMovieGenres() {
@@ -51,6 +41,16 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
 
     fun createImageUrl (backDropPath: String, size: String): String = "https://image.tmdb.org/t/p/$size/$backDropPath"
 
-    fun getMovieGenreById(genreIds: List<Long>): List<Genre>? = movieGenres.value?.data?.genres?.filter{genre ->  genreIds.any { id -> genre.id == id} }
+    fun getMovieGenreById(genreIds: List<Long>): String = movieGenres.value?.data?.genres?.filter{genre ->  genreIds.any { id -> genre.id == id} }?.joinToString { it.name } ?: ""
+
+    private fun withSuffix(count: Long): String {
+        if (count < 1000) return "" + count
+        val exp: Int = (Math.log(count.toDouble()) / Math.log(1000.0)).toInt()
+        return String.format(
+            "%.1f%c",
+            count / Math.pow(1000.0, exp.toDouble()),
+            "kMGTPE"[exp - 1]
+        )
+    }
 
 }

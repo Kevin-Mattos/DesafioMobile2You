@@ -9,22 +9,31 @@ import com.example.desafiomobile2you.databinding.FragmentFailedToLoadMovieBindin
 
 class FailedToLoadMovieFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
-
     var observe: (() -> Unit) -> Unit = {}
+
     var retry: () -> Unit = {}
 
     lateinit var mBinding: FragmentFailedToLoadMovieBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setupBinding(inflater, container)
+        setupObservers()
+        return mBinding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mBinding.retryButton.dispose()
+    }
+
+    private fun setupBinding(inflater: LayoutInflater, container: ViewGroup?) {
         mBinding = FragmentFailedToLoadMovieBinding.inflate(inflater, container, false)
+    }
+
+    private fun setupObservers() {
         observe {
             mBinding.retryButton.revertAnimation()
         }
@@ -33,14 +42,7 @@ class FailedToLoadMovieFragment : Fragment() {
             mBinding.retryButton.startAnimation()
             retry()
         }
-
-
-        return mBinding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mBinding.retryButton?.dispose()
-    }
 
 }

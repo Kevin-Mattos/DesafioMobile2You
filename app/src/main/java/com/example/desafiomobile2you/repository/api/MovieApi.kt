@@ -13,7 +13,7 @@ class MovieApi(retrofit: Retrofit) {
     val movieService = retrofit.create(MovieService::class.java)
 
     fun fetchDetails(apiKey: String, id: Int): Response<Movie?>? {
-        val call = movieService.getDetails(id, apiKey, Locale.getDefault().toLanguageTag() )
+        val call = movieService.getDetails(id, apiKey, Locale.getDefault().toLanguageTag())
         return try {
             call.execute()
         } catch (e: Exception) {

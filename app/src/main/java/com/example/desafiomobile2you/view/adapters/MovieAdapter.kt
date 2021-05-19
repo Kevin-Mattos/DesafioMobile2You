@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.desafiomobile2you.databinding.MovieRecyclerItemViewBinding
 import com.example.desafiomobile2you.repository.entities.Movie
 
-class MovieAdapter(val context: Context, val movies: MutableList<Movie> = mutableListOf(), val actions: MovieAction):
+class MovieAdapter(val context: Context, val movies: MutableList<Movie> = mutableListOf(), val actions: MovieAction) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     interface MovieAction {
@@ -16,10 +16,7 @@ class MovieAdapter(val context: Context, val movies: MutableList<Movie> = mutabl
         fun getMovieImageUrl(backdropPath: String, size: String): String
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = MovieRecyclerItemViewBinding.inflate(LayoutInflater.from(context), parent, false)
         return ViewHolder(binding, actions)
     }
@@ -37,7 +34,7 @@ class MovieAdapter(val context: Context, val movies: MutableList<Movie> = mutabl
         notifyDataSetChanged()
     }
 
-    class ViewHolder (private val mBinding: MovieRecyclerItemViewBinding, private val actions: MovieAction) :
+    class ViewHolder(private val mBinding: MovieRecyclerItemViewBinding, private val actions: MovieAction) :
         RecyclerView.ViewHolder(mBinding.root) {
 
         fun bind(movie: Movie) {

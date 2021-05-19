@@ -28,10 +28,10 @@ class MovieRepository(retrofit: Retrofit) {
         val liveData = MutableLiveData<Resource<Movie, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
-                Log.i(TAG, "obtendo detalhes do filme com id $movieId")
+                Log.i(TAG, "fetching details for movie with id: $movieId")
                 val response = movieApi.fetchDetails(it, movieId)
                 withContext(Dispatchers.Main) {
-                   postResourse(liveData, response, callback)
+                    postResourse(liveData, response, callback)
                 }
             }
         }
@@ -42,7 +42,7 @@ class MovieRepository(retrofit: Retrofit) {
         val liveData = MutableLiveData<Resource<SimilarMovies, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
-                Log.i(TAG, "obtendo filmes similares ao filme com id $id")
+                Log.i(TAG, "fetching similar movies for movie with id $id")
                 val response = movieApi.fetchSimilarMovies(it, id)
                 withContext(Dispatchers.Main) {
                     postResourse(liveData, response, callback)
@@ -56,8 +56,8 @@ class MovieRepository(retrofit: Retrofit) {
         val liveData = MutableLiveData<Resource<Genres, Exception>>()
         apiKey?.let {
             CoroutineScope(Dispatchers.IO).launch {
-                Log.i(TAG, "obtendo generos")
-                var response: Response<Genres?>? = movieApi.fetchMovieGenres(it)
+                Log.i(TAG, "fetching genres")
+                val response: Response<Genres?>? = movieApi.fetchMovieGenres(it)
                 withContext(Dispatchers.Main) {
                     postResourse(liveData, response, callback)
                 }
@@ -66,20 +66,20 @@ class MovieRepository(retrofit: Retrofit) {
         return liveData
     }
 
-    fun <T> postResourse(liveData: MutableLiveData<Resource<T, Exception>>, response: Response<T?>?, callback: (Resource<T, Exception>) -> Unit) {
-        if (response?.isSuccessful == true) {
+    private fun <T> postResourse(liveData: MutableLiveData<Resource<T, Exception>>, response: Response<T?>?, callback: (Resource<T, Exception>) -> Unit) {
+        if (response?.isSuccessful == true && response.body() != null) {
             val result = response.body()!!
             val resource = Resource<T, Exception>(result)
             liveData.postValue(resource)
             callback(resource)
-        }else if (response?.isSuccessful == false) {
-            Log.d(TAG,"Falhou:\n${response.errorBody()?.string()}")
-            val resource = Resource<T, Exception>(RuntimeException("Falha ao obter dados"))
+        } else if (response?.isSuccessful == false) {
+            Log.d(TAG, "failed :\n${response.errorBody()?.string()}")
+            val resource = Resource<T, Exception>(RuntimeException("failed to get data"))
             liveData.postValue(resource)
             callback(resource)
         } else {
-            Log.i(TAG,"Falha na conexão")
-            val resource = Resource<T, Exception>(ConnectException("Falha na conexão"))
+            Log.i(TAG, "Connection fail")
+            val resource = Resource<T, Exception>(ConnectException("Connection fail"))
             liveData.postValue(resource)
             callback(resource)
         }

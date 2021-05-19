@@ -23,6 +23,4 @@ data class Movie (
     val voteCount: Double
 ) {
     var isSelected = false
-
-    var wasSelected = false
 }

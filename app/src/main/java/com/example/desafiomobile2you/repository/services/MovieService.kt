@@ -14,26 +14,18 @@ private const val route = "movie"
 interface MovieService {
 
 
-    @Headers( "Content-Type: application/json;charset=UTF-8")
+    @Headers("Content-Type: application/json;charset=UTF-8")
     @GET("$route/{id}")
-    fun getDetails(
-        @Path("id") id: Int,
-        @Query("api_key") apiKey: String,
-        @Query("language") language: String
-    ): Call<Movie?>
+    fun getDetails(@Path("id") id: Int, @Query("api_key") apiKey: String, @Query("language") language: String): Call<Movie?>
 
 
-    @Headers( "Content-Type: application/json;charset=UTF-8")
+    @Headers("Content-Type: application/json;charset=UTF-8")
     @GET("$route/{id}/similar")
-    fun getSimilarMovies(
-        @Path("id") id: Int,
-        @Query("api_key") apiKey: String,
-        @Query("language") language: String
-    ): Call<SimilarMovies?>
+    fun getSimilarMovies(@Path("id") id: Int, @Query("api_key") apiKey: String, @Query("language") language: String): Call<SimilarMovies?>
 
-    @Headers( "Content-Type: application/json;charset=UTF-8")
+    @Headers("Content-Type: application/json;charset=UTF-8")
     @GET("genre/$route/list")
-    fun getMovieGenres(@Query("api_key") apiKey: String,@Query("language") language: String): Call<Genres?>
+    fun getMovieGenres(@Query("api_key") apiKey: String, @Query("language") language: String): Call<Genres?>
 
 
 }
