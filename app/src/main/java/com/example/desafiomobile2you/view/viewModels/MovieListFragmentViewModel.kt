@@ -7,8 +7,6 @@ import com.example.desafiomobile2you.repository.MovieRepository
 import com.example.desafiomobile2you.repository.entities.SimilarMovies
 import com.example.desafiomobile2you.util.Resource
 import org.koin.java.KoinJavaComponent.inject
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MovieListFragmentViewModel(application: Application): AndroidViewModel(application) {
 

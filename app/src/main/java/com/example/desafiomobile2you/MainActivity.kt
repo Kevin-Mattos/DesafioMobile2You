@@ -7,14 +7,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.desafiomobile2you.databinding.ActivityMainBinding
-import com.example.desafiomobile2you.repository.MovieRepository
 import com.example.desafiomobile2you.view.extensions.transactionFragment
 import com.example.desafiomobile2you.view.fragments.FailedToLoadMovieFragment
 import com.example.desafiomobile2you.view.fragments.MOVIE_ID_TAG
 import com.example.desafiomobile2you.view.fragments.MovieListFragment
 import com.example.desafiomobile2you.view.viewModels.MainActivityViewModel
-import org.koin.core.module.Module
-import org.koin.dsl.module
 
 class MainActivity : AppCompatActivity() {
 

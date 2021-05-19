@@ -2,11 +2,8 @@ package com.example.desafiomobile2you
 
 import android.app.Application
 import com.example.desafiomobile2you.repository.MovieRepository
-import com.example.desafiomobile2you.view.viewModels.MainActivityViewModel
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

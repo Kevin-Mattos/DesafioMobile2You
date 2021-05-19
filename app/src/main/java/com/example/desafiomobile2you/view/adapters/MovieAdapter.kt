@@ -1,7 +1,6 @@
 package com.example.desafiomobile2you.view.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -21,11 +20,8 @@ class MovieAdapter(val context: Context, val movies: MutableList<Movie> = mutabl
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        val viewCriada = MovieRecyclerItemViewBinding
-            .inflate(
-                LayoutInflater.from(context), parent, false
-            )
-        return ViewHolder(viewCriada, actions)
+        val binding = MovieRecyclerItemViewBinding.inflate(LayoutInflater.from(context), parent, false)
+        return ViewHolder(binding, actions)
     }
 
     override fun getItemCount() = movies.size

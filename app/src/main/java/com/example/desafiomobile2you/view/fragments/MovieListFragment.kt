@@ -9,11 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.desafiomobile2you.MainActivity
 import com.example.desafiomobile2you.databinding.FragmentMovieListBinding
-import com.example.desafiomobile2you.repository.MovieRepository
 import com.example.desafiomobile2you.view.adapters.MovieAdapter
 import com.example.desafiomobile2you.view.viewModels.MovieListFragmentViewModel
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 const val MOVIE_ID_TAG = "get_movie_id"
 class MovieListFragment : Fragment(), MovieAdapter.MovieAction {

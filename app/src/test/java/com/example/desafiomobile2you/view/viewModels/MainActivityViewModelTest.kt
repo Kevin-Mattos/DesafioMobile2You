@@ -8,11 +8,12 @@ import com.example.desafiomobile2you.repository.entities.Genre
 import com.example.desafiomobile2you.repository.entities.Genres
 import com.example.desafiomobile2you.repository.entities.Movie
 import com.example.desafiomobile2you.util.Resource
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.rules.TestRule
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.core.logger.Level
+import org.koin.dsl.module
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
@@ -28,18 +29,33 @@ class MainActivityViewModelTest {
 
     lateinit var movieRepository: MovieRepository
 
+
     @Before
     fun setUp() {
 
         movieRepository = Mockito.mock(MovieRepository::class.java)
         whenever(movieRepository.fetchMovieGenres()).thenAnswer {
-            MutableLiveData<Resource<Genres, Exception>>().apply {
-                value = Resource(Genres(listOf()))
-            }
+            MutableLiveData<Resource<Genres, Exception>>().apply { value = Resource(Genres(listOf())) }
         }
-        viewModel = MainActivityViewModel(Application(), movieRepository)
+
+        val appModule = module {
+            single { movieRepository }
+        }
+
+        startKoin {
+            printLogger(Level.NONE)
+            modules(appModule)
+        }
+
+        viewModel = MainActivityViewModel(Application())
 
     }
+
+    @After
+    fun after() {
+        stopKoin()
+    }
+
 
     @Test
     fun fetchDetails_deve_alterar_valores_de_acordo_com_filme_recebido_quando_sucesso() {
@@ -101,6 +117,7 @@ class MainActivityViewModelTest {
         val genres = mock<Genres> {
             on { genres } doReturn listOf(Genre(1, expectedGenreName))
         }
+
         whenever(movieRepository.fetchMovieGenres(any())).then {
             val liveData = MutableLiveData<Resource<Genres, Exception>>()
             liveData.value = Resource(genres)
